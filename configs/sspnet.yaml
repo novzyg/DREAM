@@ -1,0 +1,10 @@
+model:
+  name: "SSPNet"
+  emb_dim: 64
+  dropout: 0.7
+  target_ddi: 0.06
+  coef: 2.5
+  type: "multilabel"
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"

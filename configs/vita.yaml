@@ -1,0 +1,12 @@
+model:
+  name: "VITA"
+  emb_dim: 64
+  max_len: 45
+  beam_size: 4
+  max_diag_num: 39
+  max_proc_num: 32
+  max_med_num: 56
+  type: "sequence"
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"

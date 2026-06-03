@@ -1,0 +1,25 @@
+model:
+  name: "RAREMed"
+  type: "multilabel"
+  emb_dim: 512
+  encoder_layers: 3
+  nhead: 4
+  dropout: 0.3
+  weight_multi: 0.005
+  weight_ddi: 0.1
+  ddi_scale: 0.0005
+  patient_separate: false
+  train_all_visits: false
+
+optimizer:
+  lr: 0.00001
+  weight_decay: 0.1
+
+training:
+  epochs: 60
+  batch_size: 1
+  grad_clip: 5.0
+  early_stop_patience: 10
+
+evaluation:
+  threshold: 0.5

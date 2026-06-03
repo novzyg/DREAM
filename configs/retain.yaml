@@ -1,0 +1,4 @@
+model:
+  name: "RETAIN"
+  emb_dim: 64
+  type: "multilabel"

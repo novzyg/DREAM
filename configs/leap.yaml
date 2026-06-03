@@ -1,0 +1,5 @@
+model:
+  name: "LEAP"
+  emb_dim: 64
+  max_len: 20
+  type: "sequence"

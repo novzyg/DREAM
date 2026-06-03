@@ -1,0 +1,51 @@
+
+experiment:
+  name: "drugrec-benchmark"
+  output_dir: "drugrec_benchmark/results"
+
+paths:
+  data_root: "drugrec_benchmark/data"
+  dataset_dir_template: "{data_root}/{dataset}"
+
+dataset:
+  records_file: "records_final.pkl"
+  vocab_file: "voc_final.pkl"
+  ddi_adj_file: "ddi_A_final.pkl"
+  ddi_mask_file: "ddi_mask_H.pkl"
+  molecule_file: "SMILES.pkl"
+
+split:
+  train_ratio: 0.66
+  val_ratio: 0.17
+  test_ratio: 0.17
+
+seeds: [1203, 2024, 42, 1234, 5678]
+device:
+  cuda: 0
+  use_cuda: true
+
+training:
+  epochs: 50
+  batch_size: 1
+  grad_clip: 5.0
+  early_stop_patience: 10
+  checkpoint_dir: "drugrec_benchmark/results/models"
+
+evaluation:
+  threshold: 0.5
+  metrics: ["jaccard", "prauc", "f1", "ddi_rate"]
+
+optimizer:
+  name: "adam"
+  lr: 0.001
+  weight_decay: 0.0
+
+model:
+  emb_dim: 64
+
+scheduler:
+  name: "none"
+
+logging:
+  log_dir: "drugrec_benchmark/results/logs"
+  log_interval: 50

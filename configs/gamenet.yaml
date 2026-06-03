@@ -1,0 +1,12 @@
+model:
+  name: "GAMENet"
+  emb_dim: 64
+  ddi_in_memory: true
+  target_ddi: 0.06
+  temperature: 2.0
+  decay_weight: 0.85
+  use_ddi: true
+  type: "multilabel"
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"

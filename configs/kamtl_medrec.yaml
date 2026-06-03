@@ -1,0 +1,11 @@
+model:
+  name: "kamtl_medrec"
+  emb_dim: 128
+  dropout: 0.3
+  aux_weight: 0.05
+  ddi_weight: 0.0005
+  attr_top_k: 20
+  type: "multilabel"
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"

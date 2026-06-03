@@ -1,0 +1,9 @@
+model:
+  name: "COGNet"
+  emb_dim: 64
+  max_len: 45
+  beam_size: 4
+  type: "sequence"
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"

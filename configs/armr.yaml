@@ -1,0 +1,13 @@
+model:
+  name: "ARMR"
+  type: "multilabel"
+  emb_dim: 256
+  history_k: 3
+  max_visits: -1
+  blend_weight: 0.7
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"
+
+evaluation:
+  threshold: 0.3

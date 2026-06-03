@@ -1,0 +1,12 @@
+model:
+  name: "REFINE"
+  emb_dim: 128
+  num_heads: 4
+  transformer_layers: 2
+  dropout: 0.2
+  gamma_bce: 0.90
+  gamma_hinge: 0.05
+  beta: 0.50
+  bdi_scale: 0.0001
+  ddi_weight: 1.0
+  type: "multilabel"

@@ -1,0 +1,15 @@
+model:
+  name: "premier"
+  type: "multilabel"
+  emb_dim: 64
+  gat_heads: 2
+  dropout: 0.2
+  multilabel_weight: 0.05
+  ddi_weight: 0.0005
+  di_graph_weight: 0.5
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"
+
+evaluation:
+  threshold: 0.5

@@ -1,0 +1,8 @@
+model:
+  name: "4SDrug"
+  type: "multilabel"
+  emb_dim: 64
+  dropout: 0.4
+  entropy_weight: 0.5
+  ddi_weight: 1.0
+  ddi_scale: 0.00001

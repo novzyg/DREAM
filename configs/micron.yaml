@@ -1,0 +1,11 @@
+model:
+  name: "MICRON"
+  type: "multilabel"
+  emb_dim: 64
+  alpha_current: 0.75
+  multilabel_weight: 0.05
+  lambda_bce: 0.25
+  lambda_multi: 0.25
+  lambda_ddi: 0.25
+  lambda_rec: 0.25
+  target_ddi: 0.08

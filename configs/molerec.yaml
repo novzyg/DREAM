@@ -1,0 +1,15 @@
+dataset:
+  substructure_file: "substructure_smiles.pkl"
+
+model:
+  name: "MoleRec"
+  emb_dim: 64
+  dp: 0.7
+  target_ddi: 0.06
+  coef: 2.5
+  use_embedding: false
+  gnn_num_layer: 4
+  gnn_type: "gin"
+  graph_pooling: "mean"
+  virtual_node: false
+  type: "multilabel"

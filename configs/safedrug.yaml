@@ -1,0 +1,6 @@
+model:
+  name: "SafeDrug"
+  emb_dim: 256
+  target_ddi: 0.06
+  kp: 0.05
+  type: "multilabel"

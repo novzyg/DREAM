@@ -1,0 +1,16 @@
+model:
+  name: "Carmen"
+  type: "multilabel"
+  emb_dim: 64
+  dropout: 0.5
+  max_visits: 2
+  gamma_bce: 0.95
+  gamma_margin: 0.05
+  use_ehr_aug: true
+  use_ddi_encoding: true
+  ddi_weight: 0.0
+  ddi_scale: 0.0005
+
+optimizer:
+  lr: 0.0005
+  weight_decay: 0.00001

@@ -1,0 +1,17 @@
+model:
+  name: "Ontopath"
+  type: "multilabel"
+  emb_dim: 64
+  dropout: 0.1
+  bidirectional: false
+  initializer: "uniform"
+  predictor: "dot"
+  transformer_order: true
+  transformer_layers: 1
+  transformer_heads: 2
+  ddi_weight: 0.0
+  ddi_scale: 0.00001
+
+optimizer:
+  lr: 0.001
+  weight_decay: 0.001
