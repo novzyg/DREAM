@@ -1,0 +1,14 @@
+model:
+  name: "DRecHGR"
+  type: "multilabel"
+  featDim: 64
+  nhid: 8
+  num_heads: [8]
+  dropout: 0.6
+  keepRate: 0.5
+  gnn_layer: 2
+  pmp_threshold: 5
+  pdp_threshold: 3
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"

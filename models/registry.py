@@ -34,6 +34,13 @@ from drugrec_benchmark.models.molerec import (
 	build_projection_and_smiles,
 	graph_batch_from_smile,
 )
+from drugrec_benchmark.models.drechgr import (
+	DRecHGR,
+	build_hetero_adj,
+	build_meta_path_edges,
+	build_meta_path_graph,
+	build_dgl_graph_from_adj,
+)
 from drugrec_benchmark.utils.dataset_utils import load_pickle
 from drugrec_benchmark.utils.build_mpnn import build_mpnn
 ModelBuilder = Callable[[Dict[str, Any], Dict[str, Any], torch.device], Tuple[Any, Dict[str, Any]]]
@@ -860,5 +867,103 @@ def build_armr(
 	meta = {
 		"vocab_size": vocab_size,
 		"voc": voc,
+	}
+	return model, meta
+
+
+@register_model("drechgr")
+def build_drechgr(
+	config: Dict[str, Any],
+	device: torch.device,
+) -> Tuple[DRecHGR, Dict[str, Any]]:
+	"""Build DRecHGR model from config."""
+	import scipy.sparse as sp
+
+	data_dir = config["dataset"]["data_dir"]
+	vocab_path = os.path.join(data_dir, config["dataset"]["vocab_file"])
+	records_path = os.path.join(data_dir, config["dataset"]["records_file"])
+	ddi_adj_path = os.path.join(data_dir, config["dataset"]["ddi_adj_file"])
+	ehr_adj_path = os.path.join(data_dir, config["dataset"].get("ehr_adj_file", "ehr_adj_final.pkl"))
+
+	voc = load_pickle(vocab_path)
+	med_voc = voc["med_voc"]
+	diag_voc = voc["diag_voc"]
+	pro_voc = voc["pro_voc"]
+	vocab_size = (len(diag_voc.idx2word), len(pro_voc.idx2word), len(med_voc.idx2word))
+
+	records = load_pickle(records_path)
+	ddi_adj = load_pickle(ddi_adj_path)
+	ehr_adj = load_pickle(ehr_adj_path)
+
+	n_patients = len(records)
+	n_meds = vocab_size[2]
+	n_diags = vocab_size[0]
+
+	patient_id_to_idx = {id(record): i for i, record in enumerate(records)}
+
+	adj1 = build_hetero_adj(records, n_patients, n_meds, item_idx=2, device=device)
+	adj2 = build_hetero_adj(records, n_patients, n_diags, item_idx=0, device=device)
+
+	pm_rows, pm_cols = [], []
+	for p_idx, patient in enumerate(records):
+		for visit in patient:
+			if len(visit) > 2:
+				for med in visit[2]:
+					if 0 <= med < n_meds:
+						pm_rows.append(p_idx)
+						pm_cols.append(med)
+	pm_csr = sp.csr_matrix(
+		(np.ones(len(pm_rows), dtype=np.float32), (pm_rows, pm_cols)),
+		shape=(n_patients, n_meds),
+		dtype=np.float32,
+	)
+
+	pd_rows, pd_cols = [], []
+	for p_idx, patient in enumerate(records):
+		for visit in patient:
+			if len(visit) > 0:
+				for diag in visit[0]:
+					if 0 <= diag < n_diags:
+						pd_rows.append(p_idx)
+						pd_cols.append(diag)
+	pd_csr = sp.csr_matrix(
+		(np.ones(len(pd_rows), dtype=np.float32), (pd_rows, pd_cols)),
+		shape=(n_patients, n_diags),
+		dtype=np.float32,
+	)
+
+	pmp_threshold = config["model"].get("pmp_threshold", 5)
+	pdp_threshold = config["model"].get("pdp_threshold", 3)
+	pmp_edges = build_meta_path_edges(pm_csr, threshold=pmp_threshold)
+	pdp_edges = build_meta_path_edges(pd_csr, threshold=pdp_threshold)
+
+	pmp_graph = build_meta_path_graph(pmp_edges, n_patients, device)
+	pdp_graph = build_meta_path_graph(pdp_edges, n_patients, device)
+	ddi_graph = build_dgl_graph_from_adj(ddi_adj, device)
+	ehr_graph = build_dgl_graph_from_adj(ehr_adj, device)
+	meta_graphs = [pmp_graph, pdp_graph, ddi_graph, ehr_graph]
+
+	model = DRecHGR(
+		vocab_size=vocab_size,
+		n_patients=n_patients,
+		adj1=adj1,
+		adj2=adj2,
+		meta_graphs=meta_graphs,
+		patient_id_to_idx=patient_id_to_idx,
+		featuredim=config["model"].get("featDim", 64),
+		nhid=config["model"].get("nhid", 8),
+		num_heads=config["model"].get("num_heads", [8]),
+		dropout=config["model"].get("dropout", 0.6),
+		gnn_layer=config["model"].get("gnn_layer", 2),
+		keep_rate=config["model"].get("keepRate", 0.5),
+		threshold=config["evaluation"].get("threshold", 0.5),
+		device=device,
+	)
+
+	meta = {
+		"vocab_size": vocab_size,
+		"voc": voc,
+		"n_patients": n_patients,
+		"patient_id_to_idx": patient_id_to_idx,
 	}
 	return model, meta

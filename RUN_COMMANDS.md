@@ -20,6 +20,7 @@ molerec
 micron
 4sdrug
 armr
+drechgr
 ```
 
 对应模型：
@@ -34,6 +35,7 @@ MoleRec
 MICRON
 4SDrug
 ARMR
+DRecHGR
 ```
 
 ## 可用数据集
@@ -65,6 +67,7 @@ python -m drugrec_benchmark.scripts.train \
 python -m drugrec_benchmark.scripts.train --model gamenet --dataset mimic-iii_atc3 --cuda 0
 python -m drugrec_benchmark.scripts.train --model leap --dataset mimic-iv_atc4 --cuda 0
 python -m drugrec_benchmark.scripts.train --model cognet --dataset eicu_atc3 --cuda 0
+python -m drugrec_benchmark.scripts.train --model drechgr --dataset mimic-iii_atc3 --cuda 0
 ```
 
 训练会按配置里的 seeds 跑，默认是：
