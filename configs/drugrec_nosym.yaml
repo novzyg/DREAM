@@ -1,0 +1,20 @@
+model:
+  name: "drugrec_nosym"
+  type: "multilabel"
+  emb_dim: 256
+  target_ddi: 0.05
+  kp: 0.05
+  decay: 0
+  warmup: True
+  ddi_weight: 0.5
+  CI: True
+  w_ci: 0.0005
+  k_ci: 5
+  k_mul: 3
+  multivisit: True
+  mulhistory: True
+  fix_smi_rep: True
+  dim: 64
+
+dataset:
+  smiles_init_rep_file: "input_smiles_init_rep.pkl"
