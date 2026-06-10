@@ -38,7 +38,7 @@ def _sparse_to_torch(mat: sp.spmatrix, device: torch.device) -> torch.Tensor:
 	idxs = torch.from_numpy(np.vstack([mat.row, mat.col]).astype(np.int64))
 	vals = torch.from_numpy(mat.data.astype(np.float32))
 	shape = torch.Size(mat.shape)
-	return torch.sparse.FloatTensor(idxs, vals, shape).to(device)
+	return torch.sparse_coo_tensor(idxs, vals, shape, dtype=torch.float32, device=device)
 
 
 def build_hetero_adj(
@@ -305,18 +305,37 @@ class DRecHGRCore(nn.Module):
 		mEmbed_gcn = gnnEmbeds1[self.n_patients :]
 		dEmbed_gcn = gnnEmbeds2[self.n_patients :]
 
+		# Free cached memory before heavy GAT computation
+		if self.device.type == "cuda":
+			torch.cuda.empty_cache()
+
 		# HAN with 4 meta-paths: [pmp, pdp, ddi, ehr]
 		h = [pEmbed_gcn1, pEmbed_gcn2, mEmbed_gcn, mEmbed_gcn]
 		patient, med = self.HANlayers(gs, h)
 
-		# Compute patient-medication similarity scores
-		patient_expanded = patient.unsqueeze(1).repeat(1, self.n_meds, 1)
-		medication_expanded = med.unsqueeze(0).repeat(patient.shape[0], 1, 1)
-		patient_expanded = patient_expanded.reshape(-1, self.featdim)
-		medication_expanded = medication_expanded.reshape(-1, self.featdim)
-		simi_pm = torch.cat((patient_expanded, medication_expanded), dim=1)
-		simi_pm = self.output1(simi_pm).reshape(-1, self.n_meds, self.n_meds)
-		simi_pm = simi_pm.sum(axis=1)
+		# Free cached memory after GAT computation
+		if self.device.type == "cuda":
+			torch.cuda.empty_cache()
+
+		# Compute patient-medication similarity scores using chunked computation
+		# to avoid allocating excessive GPU memory.
+		# patient: (n_patients, featdim),  med: (n_meds, featdim)
+		# output1 projects concat(patient[p], med[m]) from 2*featdim to n_meds.
+		n_p = patient.shape[0]
+		chunk_size = max(1, min(256, n_p))
+		simi_pm_chunks: List[torch.Tensor] = []
+		for start in range(0, n_p, chunk_size):
+			end = min(start + chunk_size, n_p)
+			p_chunk = patient[start:end]  # (C, D)
+			# Expand patient chunk to (C, M, D)
+			p_exp = p_chunk.unsqueeze(1).expand(-1, self.n_meds, -1).reshape(-1, self.featdim)
+			# Expand med to (C, M, D)
+			m_exp = med.unsqueeze(0).expand(end - start, -1, -1).reshape(-1, self.featdim)
+			# Combine and predict
+			combined = torch.cat((p_exp, m_exp), dim=1)  # (C*M, 2D)
+			chunk_scores = self.output1(combined).reshape(-1, self.n_meds, self.n_meds)
+			simi_pm_chunks.append(chunk_scores.sum(axis=1))
+		simi_pm = torch.cat(simi_pm_chunks, dim=0)  # (n_patients, n_meds)
 
 		return simi_pm, dEmbed_gcn, med, mEmbed_gcn, patient
 

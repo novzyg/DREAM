@@ -41,9 +41,6 @@ from drugrec_benchmark.models.drechgr import (
 	build_meta_path_graph,
 	build_dgl_graph_from_adj,
 )
-
-from drugrec_benchmark.models.drugrec_nosym import DrugRec_nosym
-from drugrec_benchmark.models.drugrec_all import DrugRec_all
 from drugrec_benchmark.utils.dataset_utils import load_pickle
 from drugrec_benchmark.utils.build_mpnn import build_mpnn
 ModelBuilder = Callable[[Dict[str, Any], Dict[str, Any], torch.device], Tuple[Any, Dict[str, Any]]]
@@ -880,6 +877,7 @@ def build_drechgr(
 	device: torch.device,
 ) -> Tuple[DRecHGR, Dict[str, Any]]:
 	"""Build DRecHGR model from config."""
+	import numpy as np
 	import scipy.sparse as sp
 
 	data_dir = config["dataset"]["data_dir"]
@@ -970,81 +968,3 @@ def build_drechgr(
 		"patient_id_to_idx": patient_id_to_idx,
 	}
 	return model, meta
-
-@register_model('drugrec_nosym')
-def build_drugrec_nosym(
-	config:Dict[str,Any],
-	device:torch.device,
-)->Tuple[DrugRec_nosym,Dict[str,Any]]:
-	data_dir = config["dataset"]["data_dir"]
-	vocab_path = os.path.join(data_dir, config["dataset"]["vocab_file"])
-	ddi_adj_path = os.path.join(data_dir, config["dataset"]["ddi_adj_file"])
-
-	voc = load_pickle(vocab_path)
-	med_voc = voc["med_voc"]
-	diag_voc = voc["diag_voc"]
-	pro_voc = voc["pro_voc"]
-	vocab_size = (
-		len(diag_voc.idx2word),
-		len(pro_voc.idx2word),
-		len(med_voc.idx2word),
-	)
-	ddi_adj = load_pickle(ddi_adj_path)
-
-	model=DrugRec_nosym(
-		vocab_size=vocab_size,
-		ddi_adj=ddi_adj,
-		# input_smiles_init_rep=input_smiles_init_rep,
-		emb_dim=config["model"].get("emb_dim",256),
-		target_ddi=config["model"].get("target_ddi",0.05),
-		kp=config["model"].get("kp",0.05),
-		w_ddi=config["model"].get("ddi_weight",0.5),
-		fix_smi_rep=config["model"].get("fix_smi_rep",True),
-		threshold=config["evaluation"].get("threshold",0.5),
-		device=device,
-	)
-	meta = {
-		"vocab_size":vocab_size,
-		"voc":voc,
-	}
-	return model,meta
-
-@register_model('drugrec_all')
-def build_drugrec_all(
-	config:Dict[str,Any],
-	device:torch.device,
-)->Tuple[DrugRec_all,Dict[str,Any]]:
-	data_dir = config["dataset"]["data_dir"]
-	vocab_path = os.path.join(data_dir, config["dataset"]["vocab_file"])
-	ddi_adj_path = os.path.join(data_dir, config["dataset"]["ddi_adj_file"])
-
-	voc = load_pickle(vocab_path)
-	med_voc = voc["med_voc"]
-	diag_voc = voc["diag_voc"]
-	pro_voc = voc["pro_voc"]
-	vocab_size = (
-		len(diag_voc.idx2word),
-		len(pro_voc.idx2word),
-		len(med_voc.idx2word),
-	)
-	ddi_adj = load_pickle(ddi_adj_path)
-
-	model=DrugRec_all(
-		vocab_size=vocab_size,
-		ddi_adj=ddi_adj,
-		emb_dim=config["model"].get("emb_dim",256),
-		target_ddi=config["model"].get("target_ddi",0.05),
-		kp=config["model"].get("kp",0.05),
-		w_ddi=config["model"].get("ddi_weight",0.5),
-		threshold=config["evaluation"].get("threshold",0.5),
-		dim=config["model"].get("dim",64),
-		k_mul=config["model"].get("k_mul",3),
-		multivisit=config["model"].get("multivisit",True),
-		multihistory=config["model"].get("multihistory",True),
-		device=device,
-	)
-	meta = {
-		"vocab_size":vocab_size,
-		"voc":voc,
-	}
-	return model,meta
