@@ -29,6 +29,9 @@ from drugrec_benchmark.models.vita import VITA
 from drugrec_benchmark.models.ontopath import Ontopath, build_drug_paths, build_icd_paths
 from drugrec_benchmark.models.compnet import CompNet
 from drugrec_benchmark.models.carmen import Carmen, build_carmen_matrices
+from drugrec_benchmark.models.drugrec_nosym import DrugRec_nosym
+from drugrec_benchmark.models.drugrec_all import DrugRec_all
+from drugrec_benchmark.models.tempt import TEMPT
 from drugrec_benchmark.models.molerec import (
 	MoleRec,
 	build_projection_and_smiles,
@@ -966,5 +969,166 @@ def build_drechgr(
 		"voc": voc,
 		"n_patients": n_patients,
 		"patient_id_to_idx": patient_id_to_idx,
+	}
+	return model, meta
+
+@register_model('drugrec_nosym')
+def build_drugrec_nosym(
+	config:Dict[str,Any],
+	device:torch.device,
+)->Tuple[DrugRec_nosym,Dict[str,Any]]:
+	data_dir = config["dataset"]["data_dir"]
+	vocab_path = os.path.join(data_dir, config["dataset"]["vocab_file"])
+	ddi_adj_path = os.path.join(data_dir, config["dataset"]["ddi_adj_file"])
+
+	voc = load_pickle(vocab_path)
+	med_voc = voc["med_voc"]
+	diag_voc = voc["diag_voc"]
+	pro_voc = voc["pro_voc"]
+	vocab_size = (
+		len(diag_voc.idx2word),
+		len(pro_voc.idx2word),
+		len(med_voc.idx2word),
+	)
+	ddi_adj = load_pickle(ddi_adj_path)
+
+	model=DrugRec_nosym(
+		vocab_size=vocab_size,
+		ddi_adj=ddi_adj,
+		# input_smiles_init_rep=input_smiles_init_rep,
+		emb_dim=config["model"].get("emb_dim",256),
+		target_ddi=config["model"].get("target_ddi",0.05),
+		kp=config["model"].get("kp",0.05),
+		w_ddi=config["model"].get("ddi_weight",0.5),
+		fix_smi_rep=config["model"].get("fix_smi_rep",True),
+		threshold=config["evaluation"].get("threshold",0.5),
+		device=device,
+	)
+	meta = {
+		"vocab_size":vocab_size,
+		"voc":voc,
+	}
+	return model,meta
+
+@register_model('drugrec_all')
+def build_drugrec_all(
+	config:Dict[str,Any],
+	device:torch.device,
+)->Tuple[DrugRec_all,Dict[str,Any]]:
+	data_dir = config["dataset"]["data_dir"]
+	vocab_path = os.path.join(data_dir, config["dataset"]["vocab_file"])
+	ddi_adj_path = os.path.join(data_dir, config["dataset"]["ddi_adj_file"])
+
+	voc = load_pickle(vocab_path)
+	med_voc = voc["med_voc"]
+	diag_voc = voc["diag_voc"]
+	pro_voc = voc["pro_voc"]
+	vocab_size = (
+		len(diag_voc.idx2word),
+		len(pro_voc.idx2word),
+		len(med_voc.idx2word),
+	)
+	ddi_adj = load_pickle(ddi_adj_path)
+
+	model=DrugRec_all(
+		vocab_size=vocab_size,
+		ddi_adj=ddi_adj,
+		emb_dim=config["model"].get("emb_dim",256),
+		target_ddi=config["model"].get("target_ddi",0.05),
+		kp=config["model"].get("kp",0.05),
+		w_ddi=config["model"].get("ddi_weight",0.5),
+		threshold=config["evaluation"].get("threshold",0.5),
+		dim=config["model"].get("dim",64),
+		k_mul=config["model"].get("k_mul",3),
+		multivisit=config["model"].get("multivisit",True),
+		multihistory=config["model"].get("multihistory",True),
+		device=device,
+	)
+	meta = {
+		"vocab_size":vocab_size,
+		"voc":voc,
+	}
+	return model,meta
+
+@register_model('tempt')
+def build_tempt(
+	config:Dict[str,Any],
+	device:torch.device,
+)->Tuple[TEMPT,Dict[str,Any]]:
+	data_dir = config["dataset"]["data_dir"]
+	vocab_path = os.path.join(data_dir, config["dataset"]["vocab_file"])
+
+	voc = load_pickle(vocab_path)
+	diag_voc = voc["diag_voc"]
+	pro_voc = voc["pro_voc"]
+	med_voc = voc["med_voc"]
+	diag_voc_size = len(diag_voc.idx2word)
+	pro_voc_size = len(pro_voc.idx2word)
+	med_voc_size = len(med_voc.idx2word)
+	vocab_size = (diag_voc_size, pro_voc_size, med_voc_size)
+
+	records = load_pickle(os.path.join(data_dir, config["dataset"]["records_file"]))
+
+	hospital_ids = []
+	unique_hospital_ids = []
+	data_pkl_path = os.path.join(data_dir, "data_final.pkl")
+	if os.path.exists(data_pkl_path):
+		data_df = pd.read_pickle(data_pkl_path)
+		hos_col = None
+		for col_name in ("hospital_id", "hospital"):
+			if col_name in data_df.columns:
+				hos_col = col_name
+				break
+		if hos_col is not None:
+			raw_ids = data_df[hos_col].tolist()
+			hospital_ids = [int(x) for x in raw_ids]
+			unique_hospital_ids = sorted(set(hospital_ids))
+		else:
+			hospital_ids = [1] * len(records)
+			unique_hospital_ids = [1]
+	else:
+		hospital_ids = [1] * len(records)
+		unique_hospital_ids = [1]
+
+	pretrain_cfg = config["model"].get("pretrain", {})
+
+	caller = os.path.basename(sys.argv[0]) if sys.argv else ""
+	is_test = "test" in caller and "train" not in caller
+	train_records_for_model = None if is_test else records
+
+	model = TEMPT(
+		vocab_size=vocab_size,
+		hidden_size=config["model"].get("hidden_size", 300),
+		num_hidden_layers=config["model"].get("num_hidden_layers", 2),
+		num_attention_heads=config["model"].get("num_attention_heads", 4),
+		intermediate_size=config["model"].get("intermediate_size", 300),
+		hidden_act=config["model"].get("hidden_act", "relu"),
+		hidden_dropout_prob=config["model"].get("hidden_dropout_prob", 0.4),
+		attention_probs_dropout_prob=config["model"].get("attention_probs_dropout_prob", 0.1),
+		max_position_embeddings=config["model"].get("max_position_embeddings", 1),
+		type_vocab_size=config["model"].get("type_vocab_size", 2),
+		initializer_range=config["model"].get("initializer_range", 0.02),
+		graph=config["model"].get("graph", False),
+		graph_hidden_size=config["model"].get("graph_hidden_size", 75),
+		graph_heads=config["model"].get("graph_heads", 4),
+		threshold=config.get("evaluation", {}).get("threshold", 0.5),
+		device=device,
+		train_records=train_records_for_model,
+		pretrain_epochs=pretrain_cfg.get("epochs", 30),
+		pretrain_lr=pretrain_cfg.get("lr", 5e-4),
+		pretrain_batch_size=pretrain_cfg.get("batch_size", 64),
+		pretrain_max_seq_len=pretrain_cfg.get("max_seq_len", 100),
+		pretrain_tau=pretrain_cfg.get("tau", 0.1),
+		pretrain_loss_weight=pretrain_cfg.get("loss_weight", 1.0),
+		prompt_num=config["model"].get("prompt_num", 2),
+		hospital_ids=hospital_ids,
+		unique_hospital_ids=unique_hospital_ids,
+	)
+
+	meta = {
+		"vocab_size": vocab_size,
+		"voc": voc,
+		"hospital_ids": hospital_ids,
+		"unique_hospital_ids": unique_hospital_ids,
 	}
 	return model, meta
