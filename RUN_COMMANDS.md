@@ -21,6 +21,9 @@ micron
 4sdrug
 armr
 drechgr
+durgrec_nosym
+drugrec_all
+tempt
 ```
 
 对应模型：
@@ -36,6 +39,9 @@ MICRON
 4SDrug
 ARMR
 DRecHGR
+DrugRec_nosym
+DrugRec_all
+TEMPT
 ```
 
 ## 可用数据集
