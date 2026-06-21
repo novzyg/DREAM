@@ -1,0 +1,23 @@
+model:
+  name: "mrdtr"
+  type: "multilabel"
+  emb_dim: 64
+  dropout: 0.2
+  temporal_information_importance: 0.5
+  target_ddi: 0.06
+  kp: 2.5
+
+dataset:
+  ehr_adj_file: "ehr_adj_final.pkl"
+
+evaluation:
+  threshold: 0.5
+  metrics: ["jaccard", "prauc", "f1", "ddi_rate"]
+
+training:
+  epochs: 100
+  batch_size: 1
+  grad_clip: 5.0
+
+optimizer:
+  lr: 0.0005
