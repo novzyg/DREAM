@@ -22,7 +22,7 @@ DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Re
 
 ## 📰 News
 
-- **[2026-09]** DREAM v1 released with 22 integrated models, 3 datasets (×3 drug-granularity variants each), unified CLI, and multi-GPU batch scheduling.
+- **[2026-09]** DREAM v1 released with 27 models, 3 datasets (×3 drug-granularity variants each), unified CLI, and multi-GPU batch scheduling.
 
 ## ✨ Highlights
 
