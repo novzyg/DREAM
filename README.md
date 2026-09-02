@@ -22,6 +22,20 @@
 
 Given a patient's diagnoses, procedures, and historical medication records, each model predicts the drug combination for the current visit — DREAM lets you train, evaluate, and compare them all with one consistent interface.
 
+## 📋 Table of Contents
+
+- [Highlights](#-highlights)
+- [Leaderboard](#-leaderboard)
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
+- [Advanced Usage](#-advanced-usage)
+- [Benchmark Protocol](#-benchmark-protocol)
+- [Models](#-models)
+- [Datasets](#-datasets)
+- [Project Structure](#-project-structure)
+- [Citation](#-citation)
+- [Acknowledgements](#-acknowledgements)
+
 ## ✨ Highlights
 
 - **22 models, one interface** — from RETAIN (2016) to MR-DTR (2025), every model shares the same train/test/run commands and config format.
@@ -357,20 +371,6 @@ Full benchmark results from the survey: mean ± std over 5 seeds. Best result pe
 | FLAME | -- | -- | -- | -- |
 
 </details>
-
-## 📋 Table of Contents
-
-- [Highlights](#-highlights)
-- [Leaderboard](#-leaderboard)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Advanced Usage](#-advanced-usage)
-- [Benchmark Protocol](#-benchmark-protocol)
-- [Models](#-models)
-- [Datasets](#-datasets)
-- [Project Structure](#-project-structure)
-- [Citation](#-citation)
-- [Acknowledgements](#-acknowledgements)
 
 ## 🔧 Installation
 
