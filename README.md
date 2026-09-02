@@ -2,13 +2,11 @@
 
 <img src="fig/drug.png" width="80"/>
 
-# DREAM: A Unified Benchmark for Drug Recommendation
+# EHR-Based Medication Recommendation: A Stage-Oriented Survey and Unified Benchmark
 
 **DREAM** (**D**rug **R**ecommendation **E**valuation **A**cross **M**ultiple settings) unifies **22 medication recommendation models** under a single training, testing, and comparison framework.
 
 Given a patient's diagnoses, procedures, and historical medication records, each model predicts the drug combination for the current visit — DREAM lets you train, evaluate, and compare them all with one consistent interface.
-
-DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Recommendation: A Stage-Oriented Survey and Unified Benchmark* (see [Citation](#-citation)).
 
 <img src="fig/DREAM.png" width="450"/>
 
