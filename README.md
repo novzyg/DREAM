@@ -4,7 +4,7 @@
 
 # DREAM: A Unified Benchmark for Drug Recommendation
 
-**DREAM** (**D**rug **R**ecommendation **E**valuation **A**cross **M**ultiple settings) unifies **27 medication recommendation models** under a single training, testing, and comparison framework.
+**DREAM** (**D**rug **R**ecommendation **E**valuation **A**cross **M**ultiple settings) unifies **22 medication recommendation models** under a single training, testing, and comparison framework.
 
 Given a patient's diagnoses, procedures, and historical medication records, each model predicts the drug combination for the current visit — DREAM lets you train, evaluate, and compare them all with one consistent interface.
 
@@ -12,7 +12,7 @@ DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Re
 
 <img src="fig/DREAM.png" width="450"/>
 
-[![Models](https://img.shields.io/badge/models-27-blue)](#-models)
+[![Models](https://img.shields.io/badge/models-22-blue)](#-models)
 [![Datasets](https://img.shields.io/badge/datasets-MIMIC--III%20%7C%20MIMIC--IV%20%7C%20eICU-green)](#-datasets)
 [![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](#-installation)
 [![PyTorch](https://img.shields.io/badge/pytorch-2.12-EE4C2C?logo=pytorch&logoColor=white)](#-installation)
@@ -22,11 +22,11 @@ DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Re
 
 ## 📰 News
 
-- **[2026-09]** DREAM v1 released with 27 models, 3 datasets (×3 drug-granularity variants each), unified CLI, and multi-GPU batch scheduling.
+- **[2026-09]** DREAM v1 released with 22 models, 3 datasets (×3 drug-granularity variants each), unified CLI, and multi-GPU batch scheduling.
 
 ## ✨ Highlights
 
-- **27 models, one interface** — from LR/ECC (2011) to FLAME (2026), every model shares the same train/test/run commands and config format.
+- **22 models, one interface** — from RETAIN (2016) to MR-DTR (2025), every model shares the same train/test/run commands and config format.
 - **3 benchmark datasets** — MIMIC-III, MIMIC-IV, and eICU, each processed at three drug-granularity levels (**all-level / ATC-3 / ATC-4**).
 - **Unified CLI** — `train`, `test`, and `run` subcommands work for any model × dataset combination.
 - **Multi-GPU batch scheduling** — queue dozens of (model, dataset) jobs; the scheduler dispatches them across GPUs based on live memory/utilization from `nvidia-smi`, with a real-time terminal dashboard.
@@ -37,7 +37,7 @@ DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Re
 
 🚧 The interactive leaderboard (all methods × all datasets × all metrics) is under construction and will be published on GitHub Pages: **https://novzyg.github.io/DREAM**
 
-The full benchmark results (27 methods × 3 datasets × 3 medication-granularity levels) are reported in our survey paper.
+The full benchmark results are reported in our survey paper.
 
 ## 📋 Table of Contents
 
@@ -226,16 +226,13 @@ All models in DREAM are evaluated under an identical protocol to ensure fair com
 
 ## 🧠 Models
 
-DREAM integrates **27 models** spanning a decade of medication recommendation research.
+DREAM integrates **22 models** spanning a decade of medication recommendation research.
 
 | Year | Model | Title | Venue | Paper & Code |
 |:----:|:---|:---|:---|:---|
-| 2012 | LR | Binary Relevance Neural Classifiers | AIAI | [Paper](https://link.springer.com/article/10.1007/s13748-012-0030-x) |
-| 2011 | ECC | Classifier Chains for Multi-label Classification | Mach. Learn. | [Paper](https://link.springer.com/article/10.1007/s10994-011-5256-5) |
 | 2016 | RETAIN | RETAIN: An Interpretable Predictive Model for Healthcare Using Reverse Time Attention Mechanism | NeurIPS | [Paper](https://arxiv.org/abs/1608.05745) · [Code](https://github.com/mp2893/retain) |
 | 2017 | Leap | LEAP: Learning to Prescribe Effective and Safe Treatment Combinations for Multimorbidity | KDD | [Paper](https://dl.acm.org/doi/abs/10.1145/3097983.3098109) · [Code](https://github.com/neozhangthe1/AutoPrescribe) |
 | 2019 | GAMENet | GAMENet: Graph Augmented Memory Networks for Recommending Medication Combination | AAAI | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/3905) · [Code](https://github.com/sjy1203/GAMENet) |
-| 2019 | G-BERT | G-BERT: Pre-training Graph Neural Networks for Medical Representation Learning | KDD | [Paper](https://www.ijcai.org/Proceedings/2019/825) · [Code](https://github.com/jshang123/G-Bert) |
 | 2019 | CompNet | Order-free Medicine Combination Prediction with Graph Convolutional Reinforcement Learning | CIKM | [Paper](https://dl.acm.org/doi/abs/10.1145/3357384.3357965) · [Code](https://github.com/irlab-sdu/CompNet) |
 | 2021 | MICRON | Change Matters: Medication Change Prediction with Recurrent Residual Networks | IJCAI | [Paper](https://arxiv.org/abs/2105.01876) · [Code](https://github.com/ycq091044/MICRON) |
 | 2021 | ARMR | Adversarially Regularized Medication Recommendation Model with Multi-hop Memory Network | KAIS | [Paper](https://dl.acm.org/doi/10.1007/s10115-020-01513-9) · [Code](https://github.com/yanda-wang/ARMR) |
@@ -252,11 +249,9 @@ DREAM integrates **27 models** spanning a decade of medication recommendation re
 | 2023 | REFINE | REFINE: A Fine-Grained Medication Recommendation System Using Deep Learning and Personalized Drug Interaction Modeling | NeurIPS | [Paper](https://proceedings.neurips.cc/paper_files/paper/2023/hash/4b7439a4ab0b8e4bcb4e2412c6a10a58-Abstract-Conference.html) |
 | 2024 | VITA | VITA: 'Carefully Chosen and Weighted Less' Is Better in Medication Recommendation | AAAI | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/28704) · [Code](https://github.com/jhheo0123/VITA) |
 | 2024 | RAREMed | Leave No Patient Behind: Enhancing Medication Recommendation for Rare Disease Patients | SIGIR | [Paper](https://dl.acm.org/doi/abs/10.1145/3626772.3657785) · [Code](https://github.com/zzhUSTC2016/RAREMed) |
-| 2025 | LAMO | LAMO: Lossless-Attention for Medication Optimization | NeurIPS | [Paper](https://arxiv.org/abs/2503.03687) · [Code](https://github.com/zzhUSTC2016/LAMO) |
 | 2025 | SSPNet | SSPNet: Leveraging Robust Medication Recommendation with History and Knowledge | IJCAI | [Paper](https://www.ijcai.org/proceedings/2025/1052) · [Code](https://github.com/ResearchGroupHdZhang/SSPNet) |
 | 2025 | TEMPT | A Contrastive Pretrain Model with Prompt Tuning for Multi-center Medication Recommendation | ACM TOIS | [Paper](https://dl.acm.org/doi/abs/10.1145/3706631) · [Code](https://github.com/liuqidong07/TEMPT) |
 | 2025 | MR-DTR | Time-aware Medication Recommendation via Intervention of Dynamic Treatment Regimes | TheWebConf | [Paper](https://dl.acm.org/doi/abs/10.1145/3696410.3714533) · [Code](https://github.com/liyifo/MR-DTR) |
-| 2026 | FLAME | A Fine-grained LLM-based Framework for Medication Recommendation | NeurIPS | [Paper](https://proceedings.nips.cc/paper_files/paper/2025/hash/44a1f7e0a1fe7867f586b10739a0c26a-Abstract-Conference.html) · [Code](https://github.com/cxfann/Flame) |
 
 ## 📊 Datasets
 
