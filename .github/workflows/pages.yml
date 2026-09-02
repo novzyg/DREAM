@@ -6,6 +6,7 @@ on:
     paths:
       - "main_v5.tex"
       - "scripts/build_leaderboard.py"
+      - "fig/taxonomy.png"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -26,6 +27,11 @@ jobs:
 
       - name: Build leaderboard page
         run: python scripts/build_leaderboard.py --tex main_v5.tex --out _site/index.html
+
+      - name: Copy figures
+        run: |
+          mkdir -p _site/fig
+          cp fig/taxonomy.png _site/fig/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
