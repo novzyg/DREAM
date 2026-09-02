@@ -1,10 +1,8 @@
 <div align="center">
 
-<img src="fig/drug.png" width="80"/>
-
 # EHR-Based Medication Recommendation: A Stage-Oriented Survey and Unified Benchmark
 
-<img src="fig/DREAM.png" width="450"/>
+<img src="fig/DREAM.png"/>
 
 [![Models](https://img.shields.io/badge/models-22-blue)](#-models)
 [![Datasets](https://img.shields.io/badge/datasets-MIMIC--III%20%7C%20MIMIC--IV%20%7C%20eICU-green)](#-datasets)
