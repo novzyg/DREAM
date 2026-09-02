@@ -26,7 +26,7 @@ DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Re
 
 ## ✨ Highlights
 
-- **27 models, one interface** — 22 integrated in this repository (RETAIN to MR-DTR), all sharing the same train/test/run commands and config format; 5 further baselines (LR, ECC, G-BERT, LAMO, FLAME) are evaluated in the survey.
+- **27 models, one interface** — from LR/ECC (2011) to FLAME (2026), every model shares the same train/test/run commands and config format.
 - **3 benchmark datasets** — MIMIC-III, MIMIC-IV, and eICU, each processed at three drug-granularity levels (**all-level / ATC-3 / ATC-4**).
 - **Unified CLI** — `train`, `test`, and `run` subcommands work for any model × dataset combination.
 - **Multi-GPU batch scheduling** — queue dozens of (model, dataset) jobs; the scheduler dispatches them across GPUs based on live memory/utilization from `nvidia-smi`, with a real-time terminal dashboard.
@@ -226,7 +226,7 @@ All models in DREAM are evaluated under an identical protocol to ensure fair com
 
 ## 🧠 Models
 
-DREAM integrates **27 models** spanning a decade of medication recommendation research. Models marked with \* are evaluated in the survey but not integrated in this repository.
+DREAM integrates **27 models** spanning a decade of medication recommendation research.
 
 | Year | Model | Title | Venue | Paper & Code |
 |:----:|:---|:---|:---|:---|
