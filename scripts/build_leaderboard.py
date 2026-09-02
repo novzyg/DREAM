@@ -501,17 +501,10 @@ const DATA = JSON.parse(document.getElementById("payload").textContent);
 
 /* hero */
 document.getElementById("hero-title").textContent = DATA.title;
-const uniqueInsts = [];
-DATA.authors.forEach(a => {
-  const inst = a.institution.split(";")[0].trim();
-  if (inst && !uniqueInsts.includes(inst)) uniqueInsts.push(inst);
-});
 document.getElementById("hero-authors").innerHTML = DATA.authors
-  .map((a, i) => htmlEscape(a.name) + "<sup>" + (uniqueInsts.indexOf(a.institution.split(";")[0].trim()) + 1) + "</sup>")
+  .map(a => htmlEscape(a.name))
   .join(", ");
-document.getElementById("hero-insts").innerHTML = uniqueInsts
-  .map((s, i) => "<sup>" + (i + 1) + "</sup>" + htmlEscape(s))
-  .join(" &nbsp; ");
+document.getElementById("hero-insts").style.display = "none";
 function htmlEscape(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
