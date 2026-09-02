@@ -4,10 +4,6 @@
 
 # EHR-Based Medication Recommendation: A Stage-Oriented Survey and Unified Benchmark
 
-**DREAM** (**D**rug **R**ecommendation **E**valuation **A**cross **M**ultiple settings) unifies **22 medication recommendation models** under a single training, testing, and comparison framework.
-
-Given a patient's diagnoses, procedures, and historical medication records, each model predicts the drug combination for the current visit — DREAM lets you train, evaluate, and compare them all with one consistent interface.
-
 <img src="fig/DREAM.png" width="450"/>
 
 [![Models](https://img.shields.io/badge/models-22-blue)](#-models)
@@ -21,6 +17,10 @@ Given a patient's diagnoses, procedures, and historical medication records, each
 ## 📰 News
 
 - **[2026-09]** DREAM v1 released with 22 models, 3 datasets (×3 drug-granularity variants each), unified CLI, and multi-GPU batch scheduling.
+
+**DREAM** (**D**rug **R**ecommendation **E**valuation **A**cross **M**ultiple settings) unifies **22 medication recommendation models** under a single training, testing, and comparison framework.
+
+Given a patient's diagnoses, procedures, and historical medication records, each model predicts the drug combination for the current visit — DREAM lets you train, evaluate, and compare them all with one consistent interface.
 
 ## ✨ Highlights
 
