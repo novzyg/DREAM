@@ -8,7 +8,7 @@
 
 Given a patient's diagnoses, procedures, and historical medication records, each model predicts the drug combination for the current visit — DREAM lets you train, evaluate, and compare them all with one consistent interface.
 
-DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Recommendation: A Stage-Oriented Survey and Unified Benchmark* (see [Citation](#-citation)), which additionally evaluates five baselines beyond the models integrated here: LR, ECC, G-BERT (classic), and LAMO, FLAME (LLM-based) — 27 methods in total.
+DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Recommendation: A Stage-Oriented Survey and Unified Benchmark* (see [Citation](#-citation)), which additionally evaluates five baselines beyond the models integrated here — 27 methods in total.
 
 <img src="fig/DREAM.png" width="450"/>
 
@@ -37,7 +37,7 @@ DREAM is the unified benchmark introduced in our survey *EHR-Based Medication Re
 
 🚧 The interactive leaderboard (all methods × all datasets × all metrics) is under construction and will be published on GitHub Pages: **https://novzyg.github.io/DREAM**
 
-The full benchmark results (27 methods × 3 datasets × 3 medication-granularity levels) are reported in our survey paper — FLAME and LAMO lead the all-level setting, while REFINE, MR-DTR, and ARMR are strongest under ATC-3/ATC-4 granularities.
+The full benchmark results (27 methods × 3 datasets × 3 medication-granularity levels) are reported in our survey paper.
 
 ## 📋 Table of Contents
 
@@ -255,7 +255,15 @@ DREAM integrates **22 models** spanning a decade of medication recommendation re
 
 > **Note:** MR-DTR uses staged training — run it via `python -m drugrec_benchmark.scripts.train_mrdtr` instead of `scripts.train`.
 >
-> The survey additionally evaluates five baselines not included in this repository: **LR** and **ECC** (classic multi-label), **G-BERT** (ontology pretraining), and **LAMO** / **FLAME** (LLM-based; reported at the all-level granularity only).
+> Five additional baselines are evaluated in the survey but not integrated in this repository:
+>
+> | Model | Taxonomy | Venue | Links |
+> |:---|:---|:---|:---|
+> | LR | Candidate-wise scoring | AIAI | [Paper](https://link.springer.com/article/10.1007/s13748-012-0030-x) |
+> | ECC | Candidate-wise scoring | Mach. Learn. | [Paper](https://link.springer.com/article/10.1007/s10994-011-5256-5) |
+> | G-BERT | Structured clinical relations | IJCAI | [Paper](https://www.ijcai.org/Proceedings/2019/825) · [Code](https://github.com/jshang123/G-Bert) |
+> | LAMO | Constraint-guided decision | arXiv | [Paper](https://arxiv.org/abs/2503.03687) · [Code](https://github.com/zzhUSTC2016/LAMO) |
+> | FLAME | Dependency-aware set construction | NeurIPS | [Paper](https://proceedings.nips.cc/paper_files/paper/2025/hash/44a1f7e0a1fe7867f586b10739a0c26a-Abstract-Conference.html) · [Code](https://github.com/cxfann/Flame) |
 
 ## 📊 Datasets
 
