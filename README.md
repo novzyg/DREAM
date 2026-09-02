@@ -10,19 +10,19 @@ Given a patient's diagnoses, procedures, and historical medication records, each
 
 <img src="fig/DREAM.png" width="450"/>
 
-[![Models](https://img.shields.io/badge/models-22-blue)](#models)
-[![Datasets](https://img.shields.io/badge/datasets-MIMIC--III%20%7C%20MIMIC--IV%20%7C%20eICU-green)](#datasets)
-[![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](#installation)
-[![PyTorch](https://img.shields.io/badge/pytorch-2.12-EE4C2C?logo=pytorch&logoColor=white)](#installation)
-[![Leaderboard](https://img.shields.io/badge/leaderboard-coming%20soon-orange)](#leaderboard)
+[![Models](https://img.shields.io/badge/models-22-blue)](#-models)
+[![Datasets](https://img.shields.io/badge/datasets-MIMIC--III%20%7C%20MIMIC--IV%20%7C%20eICU-green)](#-datasets)
+[![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](#-installation)
+[![PyTorch](https://img.shields.io/badge/pytorch-2.12-EE4C2C?logo=pytorch&logoColor=white)](#-installation)
+[![Leaderboard](https://img.shields.io/badge/leaderboard-coming%20soon-orange)](#-leaderboard)
 
 </div>
 
-## <div id="news">📰 News</div>
+## 📰 News
 
 - **[2026-09]** DREAM v1 released with 22 models, 3 datasets (×3 drug-granularity variants each), unified CLI, and multi-GPU batch scheduling.
 
-## <div id="highlights"><img src="fig/shi.png" width="60"/>Highlights</div>
+## ✨ Highlights
 
 - **22 models, one interface** — from RETAIN (2016) to MR-DTR (2025), every model shares the same train/test/run commands and config format.
 - **3 benchmark datasets** — MIMIC-III, MIMIC-IV, and eICU, each processed at three drug-granularity levels (**all-level / ATC-3 / ATC-4**).
@@ -30,26 +30,24 @@ Given a patient's diagnoses, procedures, and historical medication records, each
 - **Multi-GPU batch scheduling** — queue dozens of (model, dataset) jobs; the scheduler dispatches them across GPUs based on live memory/utilization from `nvidia-smi`, with a real-time terminal dashboard.
 - **Standardized evaluation** — Jaccard, F1, PRAUC, and DDI-rate metrics, multi-seed runs, and cross-seed summary reports out of the box.
 
-## <div id="leaderboard"><img src="fig/link.png" width="40"/>Leaderboard</div>
+## 🏆 Leaderboard
 
 🚧 The interactive leaderboard (all models × all datasets × all metrics) is under construction and will be published on GitHub Pages: **https://novzyg.github.io/DREAM**
 
-## <div id="toc"><img src="fig/issac.gif" width="40"/> Table of Contents</div>
+## 📋 Table of Contents
 
-- [Highlights](#highlights)
-- [Leaderboard](#leaderboard)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Advanced Usage](#advanced-usage)
-- [Models](#models)
-- [Datasets](#datasets)
-- [Project Structure](#project-structure)
-- [Known Limitations](#known-limitations)
-- [Roadmap](#roadmap)
-- [Citation](#citation)
-- [Acknowledgements](#acknowledgements)
+- [Highlights](#-highlights)
+- [Leaderboard](#-leaderboard)
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
+- [Advanced Usage](#-advanced-usage)
+- [Models](#-models)
+- [Datasets](#-datasets)
+- [Project Structure](#-project-structure)
+- [Citation](#-citation)
+- [Acknowledgements](#-acknowledgements)
 
-## <div id="installation"><img src="fig/env.png" width="30"/>Installation</div>
+## 🔧 Installation
 
 ```bash
 git clone https://github.com/novzyg/DREAM.git
@@ -74,9 +72,9 @@ Tested environment:
 > cd ..                              # parent of drugrec_benchmark/
 > ```
 
-Datasets are expected under `drugrec_benchmark/data/<dataset_name>/` (see [Datasets](#datasets)).
+Datasets are expected under `drugrec_benchmark/data/<dataset_name>/` (see [Datasets](#-datasets)).
 
-## <div id="quick-start"><img src="fig/use.png" width="40"/>Quick Start</div>
+## 🚀 Quick Start
 
 > All commands below run from the parent directory of `drugrec_benchmark/`.
 
@@ -125,7 +123,7 @@ results/<model>/<dataset>/seed_<seed>/run_<time>/     # weights (.pth), logs, pe
 results/<model>/<dataset>/reports/cross_seed_summary_<timestamp>.json   # mean ± std across seeds
 ```
 
-## <div id="advanced-usage"><img src="fig/commend.png" width="35"/>Advanced Usage</div>
+## 🛠️ Advanced Usage
 
 The unified entry point `main.py` wraps the scripts above and adds batch execution and GPU-aware scheduling.
 
@@ -199,7 +197,7 @@ python -m drugrec_benchmark.scripts.export_results_summary
 
 Model hyperparameters live in `configs/<model>.yaml` (with `base_config.yaml` as the shared base) — edit these to tune a model.
 
-## <div id="models"><img src="fig/models.png" width="30"/>Models</div>
+## 🧠 Models
 
 DREAM integrates **22 models** spanning a decade of medication recommendation research. The **Config name** column is the value to pass to `--model`.
 
@@ -230,7 +228,7 @@ DREAM integrates **22 models** spanning a decade of medication recommendation re
 
 > **Note:** MR-DTR uses staged training — run it via `python -m drugrec_benchmark.scripts.train_mrdtr` instead of `scripts.train`.
 
-## <div id="datasets"><img src="fig/datasets.png" width="30"/>Datasets</div>
+## 📊 Datasets
 
 Three public EHR datasets are used, each processed into patient-level longitudinal sequences (diagnoses, procedures, medications) at three drug-granularity levels:
 
@@ -248,7 +246,7 @@ Granularity levels:
 
 Each dataset directory under `data/` contains shared files — `records_final.pkl` (patient sequences), `voc_final.pkl` (vocabularies), `ddi_A_final.pkl` (DDI adjacency), `ehr_adj_final.pkl` (EHR co-occurrence) — plus model-specific extras such as `ddi_mask_H.pkl` (DDI mask) and `SMILES.pkl` (molecular structures).
 
-## <div id="project-structure"><img src="fig/structure.png" width="40"/>Project Structure</div>
+## 🏗️ Project Structure
 
 ```text
 DREAM/
@@ -276,17 +274,7 @@ parse CLI args → load YAML config → load dataset → build model (registry)
 <img src="fig/framework1.png"/>
 </div>
 
-## <div id="known-limitations">⚠️ Known Limitations</div>
-
-- The `--config` argument is declared in `scripts/train.py` and `scripts/test.py` but is **not currently wired into `load_config`**, so custom config overrides do not take effect yet. Model hyperparameters come from `configs/*.yaml` and `base_config.yaml`.
-
-## <div id="roadmap">🗺️ Roadmap</div>
-
-- [ ] Interactive leaderboard on GitHub Pages (22 models × 9 dataset variants)
-- [ ] Wire up `--config` override support
-- [ ] More models and datasets
-
-## <div id="citation">📖 Citation</div>
+## 📖 Citation
 
 If you use DREAM in your research, please cite:
 
@@ -299,6 +287,6 @@ If you use DREAM in your research, please cite:
 }
 ```
 
-## <div id="acknowledgements">🙏 Acknowledgements</div>
+## 🙏 Acknowledgements
 
-DREAM builds on the excellent work of the medication recommendation community — we thank the authors of all [integrated models](#models) for open-sourcing their code, and the [MIT-LCP](https://mimic.mit.edu/) team for maintaining the MIMIC/eICU datasets.
+DREAM builds on the excellent work of the medication recommendation community — we thank the authors of all [integrated models](#-models) for open-sourcing their code, and the [MIT-LCP](https://mimic.mit.edu/) team for maintaining the MIMIC/eICU datasets.
