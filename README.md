@@ -25,6 +25,7 @@ Given a patient's diagnoses, procedures, and historical medication records, each
 ## 📋 Table of Contents
 
 - [Highlights](#-highlights)
+- [Taxonomy](#-taxonomy)
 - [Leaderboard](#-leaderboard)
 - [Installation](#-installation)
 - [Quick Start](#-quick-start)
@@ -44,6 +45,14 @@ Given a patient's diagnoses, procedures, and historical medication records, each
 - **Multi-GPU batch scheduling** — queue dozens of (model, dataset) jobs; the scheduler dispatches them across GPUs based on live memory/utilization from `nvidia-smi`, with a real-time terminal dashboard.
 - **Standardized evaluation** — Jaccard, PRAUC, F1, and DDI-rate metrics, multi-seed runs, and cross-seed summary reports out of the box.
 - **Unified benchmark protocol** — identical data processing (DrugBank standardization, DDInter DDI knowledge), patient-level splits, and training/evaluation settings for every model, enabling fair comparison (see [Benchmark Protocol](#-benchmark-protocol)).
+
+## 🗂️ Taxonomy
+
+The survey organizes EHR-based medication recommendation into three functional stages — **patient state modeling**, **medication knowledge modeling**, and **prescription decision modeling** — each further divided into subcategories:
+
+<div align="center">
+<img src="fig/taxonomy.png" alt="Stage-oriented taxonomy of medication recommendation systems"/>
+</div>
 
 ## 🏆 Leaderboard
 
